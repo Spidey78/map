@@ -1,0 +1,150 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .xyz{
+            color: green;
+        }
+
+        table, tr, th, td{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body> -->
+
+<!-- 
+    <div id="mno">
+
+    </div> -->
+
+
+<!-- <button onclick="Show()" style="width: 150px; height: 50px;">click me</button>
+<button onclick="Hide()" style="width: 150px; height: 50px;">click me</button>
+ -->
+
+
+
+
+<!-- <h1 id="heading">Hello world</h1> -->
+<!-- 
+<button onclick="demo()">clic here</button>
+<button onclick="demos()">clic here</button> -->
+
+<!-- 
+<form action="" id="form">
+<input id="pass" type="text" placeholder="Password">
+<input id="pass-1" type="text" placeholder="Re-Type Password"> -->
+<!-- <input type="submit"> -->
+<!-- <input type="reset"> -->
+<!-- <button id="Submit">Submit</button>
+</form> -->
+<!-- <div id="div1" class="divn">
+<input  id="branchs" type="text" placeholder="Enter City">
+<button onclick="branch()"> search </button>
+<div id="result"></div> -->
+<!-- </div>
+<select  style="display: none;"  id="result">
+
+</select> --> 
+
+<!-- 
+<button id="geo-loc">click to get location </button>
+<p id="Showdetails">user location</p>
+
+
+<script src="Main.js"></script>
+</body>
+</html> -->
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Live Location Map</title>
+</head>
+<body>
+    <div id="map" style="width: 100%; height: 100vh;"></div>
+
+    <script>
+        // Initialize the map
+        var map = {
+            data: [],
+            layout: {
+                mapbox: {
+                    style: "open-street-map",
+                    center: { lat: 0, lon: 0 },
+                    zoom: 14,
+                },
+                margin: { t: 0, b: 0, l: 0, r: 0 },
+            },
+        };
+
+        Plotly.newPlot("map", map.data, map.layout);
+
+        // Function to update the user's location
+        function updateLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const accuracy = position.coords.accuracy; // Get accuracy
+
+                        console.log("Latitude:", lat);
+                        console.log("Longitude:", lon);
+                        console.log("Accuracy (meters):", accuracy);
+
+                        if (accuracy > 1000) {
+                            console.warn(
+                                "Low accuracy detected. Try enabling GPS or connecting to Wi-Fi."
+                            );
+                        }
+
+                        // Update the map center
+                        Plotly.relayout("map", {
+                            "mapbox.center": { lat: lat, lon: lon },
+                        });
+
+                        // Add a marker for the current location with accuracy info
+                        map.data = [
+                            {
+                                type: "scattermapbox",
+                                lat: [lat],
+                                lon: [lon],
+                                mode: "markers",
+                                marker: { size: 14, color: "red" },
+                                text: [`You are here<br>Accuracy: ${accuracy} meters`],
+                            },
+                        ];
+
+                        Plotly.react("map", map.data, map.layout);
+                    },
+                    (error) => {
+                        console.error("Error getting location:", error.message);
+                    },
+                    {
+                        enableHighAccuracy: true, // Request GPS if available
+                        timeout: 15000,           // Maximum wait time
+                        maximumAge: 0,            // No cached location
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by your browser.");
+            }
+        }
+
+        // Start tracking location
+        updateLocation();
+    </script>
+</body>
+</html> 
